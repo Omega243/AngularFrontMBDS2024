@@ -1,0 +1,130 @@
+<div class="container">
+  <div class="btnAjout">
+    <a routerLink="/add">
+      <button mat-flat-button color="accent">Ajouter Assignment</button>
+    </a>
+  </div>
+
+  <h2>{{ titre }}</h2>
+  <p>Nb documents : {{totalDocs}}, nbPages : {{totalPages}}
+    <br>
+  Page courante : {{page}}, nb de docs par page : {{limit}}
+  <!-- add slider for adjusting the limit property, with angular 17 -->
+  <mat-slider
+    min="1"
+    max="10"
+    step="1"
+    thumbLabel
+  >
+  <input matSliderThumb [(ngModel)]="limit" (change)="getAssignmentsFromService()">
+</mat-slider>
+</p>
+  <div>
+    <button mat-raised-button color="primary"
+            [disabled]="!hasPrevPage"
+            [disabled]="!hasPrevPage"
+            (click)="premierePage()">Première
+    </button>
+    &nbsp;&nbsp;&nbsp;
+    <button mat-raised-button color="primary"
+            [disabled]="!hasPrevPage"
+            (click)="pagePrecedente()">Précédent
+    </button>
+    &nbsp;&nbsp;&nbsp;
+    <button mat-raised-button color="primary"
+            [disabled]="!hasNextPage"
+            (click)="pageSuivante()">Suivante
+    </button>
+    &nbsp;&nbsp;&nbsp;
+    <button mat-raised-button color="primary"
+            [disabled]="!hasNextPage"
+            (click)="dernierePage()">Dernière
+    </button>
+  </div>
+
+  <mat-paginator #paginator
+               class="demo-paginator"
+               (page)="handlePageEvent($event)"
+               [length]="totalPages"
+               [pageSize]="limit"
+               [showFirstLastButtons]="true"
+               [pageSizeOptions]="[5, 10, 25]"
+               [pageIndex]="page"
+               aria-label="Select page">
+</mat-paginator>
+
+  <table mat-table [dataSource]="assignments"
+           class="mat-elevation-z8 demo-table">
+
+    <!-- Nom Column -->
+    <ng-container matColumnDef="nom">
+      <th mat-header-cell *matHeaderCellDef>Nom</th>
+      <td mat-cell *matCellDef="let a">{{a.nom}}</td>
+    </ng-container>
+
+    <!-- dateDeRendu Column -->
+    <ng-container matColumnDef="dateDeRendu">
+      <th mat-header-cell *matHeaderCellDef>Date de rendu</th>
+      <td mat-cell *matCellDef="let a">{{a.dateDeRendu | date}}</td>
+    </ng-container>
+
+    <!-- rendu Column -->
+    <ng-container matColumnDef="rendu">
+      <th mat-header-cell *matHeaderCellDef>Rendu</th>
+      <td mat-cell *matCellDef="let a">{{a.rendu}}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+
+
+
+
+
+
+
+
+
+
+  <mat-divider></mat-divider>
+  <mat-list>
+    @for(a of assignments; track a.nom) {
+    <mat-list-item >
+      <nav>
+        <a routerLink="/assignment/{{a._id}}">
+          <div>
+            <h3 matListItemTitle [ngStyle]="{ color: a.rendu ? 'green' : 'red' }" >{{ a.nom }}</h3>
+            <p matListItemLine>{{ a.dateDeRendu | date }}</p>
+          </div>
+        </a>
+      </nav>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    }
+  </mat-list>
+</div>
+
+<!--
+<p>Avec Angular supérieur à la version 17</p>
+<table>
+  <tbody>
+    @for (a of assignments; track a.nom) {
+      <div [ngStyle]="{'color':getColor(a)}">
+      @if(a.rendu) {
+        <tr>
+          <td>{{ a.nom }}</td>
+          <td>{{ a.dateDeRendu|date }}</td>
+          <td>{{ a.rendu }}</td>
+        </tr>
+      } @else {
+        <tr>
+          <td>{{ a.nom }} NON RENDU !!!!</td>
+        </tr>
+      }
+    </div>
+    }
+  </tbody>
+</table>
+-->

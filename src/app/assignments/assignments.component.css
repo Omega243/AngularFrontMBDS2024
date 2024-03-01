@@ -1,0 +1,33 @@
+table, tr, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  padding: 20px;
+}
+
+.rendu {
+  color:green;
+}
+
+.nonRendu {
+  color:red;
+  background-color: yellow;
+  border:2px dashed purple;
+  padding:5px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.btnAjout {
+  align-self: flex-end;
+}
+
+.demo-table {
+  width: 100%;
+}
+
+.demo-button-container {
+  padding-bottom: 16px;
+}
